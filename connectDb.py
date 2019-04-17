@@ -1,6 +1,6 @@
 from sqlalchemy import create_engine
 import cx_Oracle
-password='Sweet130118'
+password=''
 host='localhost'
 port=1522
 sid='orcl1'
