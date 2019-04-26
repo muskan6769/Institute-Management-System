@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+{% block content %}
+<table contenteditable='true'>  
+        <tr>
+          <th>ENROLL_NO</th>
+          <th>NAME</th>
+          <th>QUIZ1_MARKS_OF_15</th>
+          <th>MIDSEM_MARKS_OF_30</th>
+          <th>QUIZ2_MARKS_OF_30</th>
+          <th>ENDSEM_MARKS_OF_75</th>
+          <th>ATTENDANCE_IN_PERC</th>
+        </tr>
+        {% for stud_id,perf in stud_perf.items() %}
+        <tr>
+            <td>{{ stud_id }}</td>
+            <td>{{ perf[0] }}</td>
+            <td>{{ perf[1] }}</td>
+            <td>{{ perf[2] }}</td>
+            <td>{{ perf[3] }}</td>
+            <td>{{ perf[4] }}</td>
+            <td>{{ perf[5] }}</td>
+        </tr>
+        {% endfor %}
+</table>
+{% endblock content %}

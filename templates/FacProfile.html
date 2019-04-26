@@ -1,0 +1,7 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1>Welcome {{ current_user }}</h1>
+    {% for course in courses %}
+        <p><span>{{ course }}</span><span><a href="{{ url_for('showList',course= course ) }}">View List </a></span></p>
+    {% endfor %}
+{% endblock content %}

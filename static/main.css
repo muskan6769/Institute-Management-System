@@ -1,6 +1,7 @@
 body {
    
-    background-image: url(Images/background.jpg);
+    /* background-image: url(Images/background.jpg); */
+    background : #fafafa;
     background-repeat: no-repeat;
     background-size: cover;
     /* height: 150%;  */
@@ -36,6 +37,7 @@ body {
     border: 1px solid #dddddd;
     border-radius: 3px;
     margin-bottom: 20px;
+    opacity: 0.7;
   }
   
   .article-title {

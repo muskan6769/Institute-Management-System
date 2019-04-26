@@ -1,0 +1,62 @@
+{% extends "layout.html" %}
+{% block content %}
+    <h1 >Welcome {{ current_user }}</h1>
+    {% for details in stud_details %}
+        <!-- <p><span>{{ course }}</span><span><a href="{{ url_for('showList',course= course ) }}">View List</a></span></p> -->
+        <p>{{ details }}</p>
+    {% endfor %}
+
+    {% for sem in sem_list %}
+    <button onclick="displayTable(this)" type="button" class="btn btn-secondary" value="{{sem}}">Sem{{sem}}</button>
+    {% endfor %}
+
+    {% for sem in sem_list %}
+    <table id="sem{{sem}}" style="visibility:hidden;">  
+        <tr>
+          <th>COURSE</th>
+          <th>QUIZ1_MARKS_OF_15</th>
+          <th>MIDSEM_MARKS_OF_30</th>
+          <th>QUIZ2_MARKS_OF_30</th>
+          <th>ENDSEM_MARKS_OF_75</th>
+          <th>LABTEST_MARKS</th>
+          <th>ATTENDANCE_IN_PERC</th>
+        </tr>
+        {% for course,perf in stud_course_perf[sem].items() %}
+        <tr>
+            <td>{{ course }}</td>
+            <td>{{ perf[0] }}</td>
+            <td>{{ perf[1] }}</td>
+            <td>{{ perf[2] }}</td>
+            <td>{{ perf[3] }}</td>
+            <td>{{ perf[4] }}</td>
+            <td>{{ perf[5] }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    {% endfor %}
+   
+
+<script>
+    // $('#currentSem').data("currentSem","{{currentSem}}");
+    // var sem = $('#currentSem').data("currentSem")
+    var y = $("#sem3").text();
+    var cur_sem = "{{currentSem}}";
+    var prev_Tab;
+    console.log($("#sem2").text());
+    function disply_cur_sem_tab(){
+        $("#sem"+cur_sem).css({'visibility' : 'visible'});
+        prev_Tab = cur_sem;
+        console.log("dbh");
+    }
+    function displayTable(objButton){
+        var str = objButton.value;
+        
+        console.log(prev_Tab);
+        $("#sem"+str).css({'visibility' : 'visible'});
+        $("#sem"+prev_Tab).css({'visibility' : 'hidden'});
+        prev_Tab = str;
+    }
+  
+</script>
+
+{% endblock content %}

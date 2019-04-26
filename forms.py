@@ -13,11 +13,18 @@ class RegistrationForm(FlaskForm):
     branch = StringField('Branch',validators=[DataRequired()])
     submit = SubmitField('Sign Up')
 
-class LoginForm(FlaskForm):
+class StudLoginForm(FlaskForm):
     rollNo = StringField('EnrollNo',validators=[DataRequired(),length(min=2,max=50)])
     password = PasswordField('Password', validators=[DataRequired()])
     remember = BooleanField('Remember Me')
     submit = SubmitField('LogIn')
+
+class FacLoginForm(FlaskForm):
+    facCode = StringField('Faculty Code',validators=[DataRequired(),length(min=2,max=50)])
+    password = PasswordField('Password', validators=[DataRequired()])
+    remember = BooleanField('Remember Me')
+    submit = SubmitField('LogIn')
+
 
 
 
