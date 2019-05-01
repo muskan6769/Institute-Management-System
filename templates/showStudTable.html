@@ -1,0 +1,174 @@
+{% extends "layout.html" %}
+{% block content %}
+<table>  
+        <tr>
+          {% for i in colnames %}
+          <th>{{ i }}</th>
+          {% endfor %}
+          <th>Edit</th>
+          <th>Delete</th>
+        </tr>
+        {% for list in stable %}
+        <tr >
+        
+          {% for i in list%}<td>{{i}}</td>{% endfor %}
+            <td><button class ="editbtn" id ="{{stud_id}}" type="button" class="btn btn-secondary" value="{{stud_id}}">Edit</button></td>
+            <td><button class ="deletebtn" id ="{{stud_id}}" type="button" class="btn btn-secondary" value="{{stud_id}}">Delete</button></td>
+    </tr>
+        {% endfor %}
+</table>
+
+<script>
+
+    var table = "{{Table}}"
+    console.log(table)
+
+ 
+        $(document).ready(function() {
+            $('.editbtn').click(function(event) {
+                var currentTD = $(this).parents('tr').find('td');
+                if ($(this).html() == 'Edit') {                  
+                    $.each(currentTD, function () {
+                        $(this).prop('contenteditable', true)
+                    });
+                } 
+                else {
+                    $.each(currentTD, function () {
+                        $(this).prop('contenteditable', false)
+                    });
+                    var values = [];
+                    jQuery.each(currentTD, function(i, item) {
+                        x = item.innerHTML;
+                        console.log(x.slice(x.length-4,x.length))
+                        if(x.slice(x.length-4,x.length)=="<br>"){
+                            x=x.slice(0,x.length-4);
+                        }
+                    values.push(x); });
+                    if(table == "Student"){
+                            $.ajax({
+                                data : {
+                                    NAME : values[0],
+                                    ROLL_NO: values[1],PROGRAMME: values[2],BRANCH: values[3],SEMESTER: values[4]
+                                },
+                                type : 'POST',
+                                url : '/updateStudTables/Student'
+                            })
+                            .done(function(data) {
+                                console.log("sucess");
+                            });     
+                    }    
+
+                    else if(table == "Faculty"){
+                            $.ajax({
+                                data : {
+                                    NAME: values[0],
+                                    FAC_CODE: values[1],ROOM_NO: values[2],PHONE_NO: values[3],EMAIL_ID: values[4],OFFICE:values[5]
+                                },
+                                type : 'POST',
+                                url : '/updateStudTables/Faculty'
+                            })
+                            .done(function(data) {
+                                console.log("sucess");
+                            });     
+                    }    
+
+                    else if(table == "Course"){
+                            $.ajax({
+                                data : {
+                                    NAME:values[0],CODE:values[1],PROGRAMME:values[2],BRANCH:values[3],SEMESTER:values[4]
+                                },
+                                type : 'POST',
+                                url : '/updateStudTables/Course'
+                            })
+                            .done(function(data) {
+                                console.log("sucess");
+                            });     
+                    }    
+
+                    else {
+                            $.ajax({
+                                data : {
+                                    PROGRAMME:values[0],BRANCH:values[1],NO_OF_STUDENTS:values[2]},
+                                type : 'POST',
+                                url : '/updateStudTables/Programme'
+                            })
+                            .done(function(data) {
+                                console.log("sucess");
+                            });     
+                    }    
+            }
+            $(this).html($(this).html() == 'Edit' ? 'Save' : 'Edit');
+            event.preventDefault();
+            });
+            });
+            
+
+
+
+            $(document).ready(function() {
+            $('.deletebtn').click(function(event) {
+                var currentTD = $(this).parents('tr').find('td');
+                var values = [];
+                jQuery.each(currentTD, function(i, item) {
+                    x = item.innerHTML;
+                    values.push(x); });
+            if(table=="Student"){        
+                    $.ajax({
+                        data : {
+                            NAME : values[0],
+                            ROLL_NO: values[1],PROGRAMME: values[2],BRANCH: values[3],SEMESTER: values[4]
+                        },
+                        type : 'POST',
+                        url : '/up/Student'
+                    })
+                    .done(function(data) {
+                        console.log("sucess");
+                    });
+            }
+
+            else if(table == "Faculty"){
+                            $.ajax({
+                                data : {
+                                    NAME: values[0],
+                                    FAC_CODE: values[1],ROOM_NO: values[2],PHONE_NO: values[3],EMAIL_ID: values[4],OFFICE:values[5]
+                                },
+                                type : 'POST',
+                                url : '/up/Faculty'
+                            })
+                            .done(function(data) {
+                                console.log("sucess");
+                            });     
+                    }    
+            else if(table == "Course"){
+                            $.ajax({
+                                data : {
+                                    NAME:values[0],CODE:values[1],PROGRAMME:values[2],BRANCH:values[3],SEMESTER:values[4]
+                                },
+                                type : 'POST',
+                                url : '/up/Course'
+                            })
+                            .done(function(data) {
+                                console.log("sucess");
+                            });     
+                    }
+
+                else {
+                            $.ajax({
+                                data : {
+                                    PROGRAMME:values[0],BRANCH:values[1],NO_OF_STUDENTS:values[2]},
+                                type : 'POST',
+                                url : '/up/Programme'
+                            })
+                            .done(function(data) {
+                                console.log("sucess");
+                            });     
+                    }        
+            $(this).parents('tr').hide();
+            event.preventDefault();
+            });
+            });
+
+
+// });
+</script>
+{% endblock content %}

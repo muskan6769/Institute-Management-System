@@ -2,6 +2,6 @@
 {% block content %}
     <h1>Welcome {{ current_user }}</h1>
     {% for course in courses %}
-        <p><span>{{ course }}</span><span><a href="{{ url_for('showList',course= course ) }}">View List </a></span></p>
+        <p><span>{{ course }}</span><span><a href="{{ url_for('showList',course= course,Type_of_User=Type_of_User,current_user=current_user ) }}">View List </a></span></p>
     {% endfor %}
 {% endblock content %}
