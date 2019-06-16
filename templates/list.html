@@ -1,15 +1,21 @@
 {% extends "layout.html" %}
-{% block content %}
+{% block body %}
+<br>
+<br>
+<br><br>
+<br>
+<br>
+<div style="padding:50px; background-color:white;opacity:0.8;">
 <table>  
         <tr>
           <th>ENROLL_NO</th>
           <th>NAME</th>
-          <th>QUIZ1_MARKS_OF_15</th>
-          <th>MIDSEM_MARKS_OF_30</th>
-          <th>QUIZ2_MARKS_OF_30</th>
-          <th>ENDSEM_MARKS_OF_75</th>
-          <th>LAB_TEST_MARKS</th>
-          <th>ATTENDANCE_IN_PERC</th>
+          <th>QUIZ1(15)</th>
+          <th>MIDSEM(30)</th>
+          <th>QUIZ2(30)</th>
+          <th>ENDSEM(75)</th>
+          <th>LAB_TEST</th>
+          <th>ATTENDANCE</th>
           <th>Edit</th>
         </tr>
         {% for stud_id,perf in stud_perf.items() %}
@@ -26,7 +32,8 @@
         </tr>
         {% endfor %}
 </table>
-<a href="{{url_for('profile',current_user= current_user,Type_of_User='Faculty')}}" class="btn btn-info">Back To Course List</a>
+</div>
+<!-- <a href="{{url_for('profile',current_user= current_user,Type_of_User='Faculty')}}" class="btn btn-info">Back To Course List</a> -->
 
 <script>
 
@@ -139,4 +146,4 @@
  
 // });
 </script>
-{% endblock content %}
+{% endblock body %}

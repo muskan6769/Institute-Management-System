@@ -42,7 +42,7 @@ class User:
 
 u= User("muskan",True,False)
 
-@app.route("/home")
+@app.route("/")
 def home():
     return render_template('home.html')
 
@@ -113,6 +113,14 @@ def register():
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         print(hashed_password)
         engine.execute("insert into Student_Tab(Name,Roll_No,Programme,Branch,Semester,Password) values(:a,:b,:c,:d,:e,:f)",{'a':form.name.data,'b':form.rollNo.data,'c':form.programme.data,'d':form.branch.data,'e':form.semester.data,'f':hashed_password})
+       
+        for i in range(1,form.semester.data+1):
+            course = engine.execute("select Code from Course_Tab where Semester = :a and Branch =:b",{'a' :i,'b':form.branch.data})
+
+            for c in course:
+                print(c[0])
+                engine.execute('insert into stud_perf_tab(COURSE_CODE,STUDENT_ID) values(:a,:b)',{'a':c[0],'b':form.rollNo.data })
+
         flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('Studlogin'))
     return render_template('register.html',title='Register', form=form)
@@ -144,8 +152,10 @@ def addFaculty(Type_of_User,current_user):
 def addCourse(Type_of_User,current_user):
     form = CourseRegisterForm()
     if form.validate_on_submit():
+        
         engine.execute("insert into Course_Tab(NAME,CODE,PROGRAMME,BRANCH,SEMESTER) values(:a,:b,:c,:d,:e)",{'a':form.course_name.data,'b':form.courseCode.data,'c':form.programme.data,'d':form.branch.data,'e':form.semester.data})
         engine.execute("insert into Fac_Course_Tab(FAC_CODE,COURSE_CODE) values(:a,:b)",{'a':form.faculty.data,'b':form.courseCode.data})
+        
         # flash('Your account has been created! You are now able to log in', 'success')
         return redirect(url_for('profile',current_user= current_user,Type_of_User="Admin"))
     return render_template('AddCourse.html',title='AddCourse', form=form,current_user=current_user,Type_of_User=Type_of_User)
@@ -163,21 +173,28 @@ def addProgramme(Type_of_User,current_user):
 def profile(Type_of_User,current_user):
     if Type_of_User == "Faculty" :
         courses=[]
+    
+        details=engine.execute("select NAME,ROOM_NO,PHONE_NO,EMAIL_ID,OFFICE from Faculty_Tab where Fac_Code = :a",{'a' : current_user})
+        for i in details:
+            fdetail=[i[0],i[1],i[2],i[3],i[4]]
         course_list = engine.execute("select Course_Code from Fac_Course_Tab where Fac_Code = :a",{'a' : current_user})
         for row in course_list:
             courses.append(row[0])
-        return render_template('Facprofile.html',title='Profile',courses=courses,current_user=current_user,Type_of_User=Type_of_User)
+        return render_template('Facprofile.html',title='Profile',courses=courses,current_user=current_user,Type_of_User=Type_of_User,fdetail=fdetail)
     elif  Type_of_User == "Student" :
-        stud=engine.execute("select Roll_No,Branch,Semester from Student_Tab where Name = :a",{'a':current_user})
+        stud=engine.execute("select Roll_No,Branch,Semester,Programme from Student_Tab where Name = :a",{'a':current_user})
         for i in stud:
-            stud_details=[i[0],i[1],i[2]]
+            stud_details=[i[0],i[1],i[2],i[3]]
         print(stud_details)
+        total_sem=engine.execute("select TOTAL_NO_OF_SEM from Programme_Tab where programme = :a and branch =:b",{'a':stud_details[3],'b':stud_details[1]})
+        for i in total_sem:
+            ts=i[0]
         currentSem = stud_details[2]
         stud_course_perf = {}
         sem_list=[]
         for sem in range(1,currentSem+1):
             sem_list.append(sem)
-            courses = engine.execute("select Code from Course_Tab where Semester = :a and Branch =:b",{'a' :sem,'b':i[1]})
+            courses = engine.execute("select Code from Course_Tab where Semester = :a and Branch =:b",{'a' :sem,'b':stud_details[1]})
             course_perf = {}
             for course in courses:
                 stud_perf = engine.execute("select QUIZ1_MARKS_OF_15,MIDSEM_MARKS_OF_30,QUIZ2_MARKS_OF_15,ENDSEM_MARKS_OF_75,LAB_TEST_MARKS,ATTENDANCE_IN_PERC from Stud_Perf_Tab where Course_Code = :a and Student_Id = :b",{'a' : course[0],'b':stud_details[0]})
@@ -185,7 +202,18 @@ def profile(Type_of_User,current_user):
                     # print()
                     course_perf[course[0]]=[perf[0],perf[1],perf[2],perf[3],perf[4],perf[5]] 
             stud_course_perf[sem] = course_perf
-        return render_template('Studprofile.html',title='Profile', stud_details=stud_details,current_user=current_user,Type_of_User=Type_of_User,stud_course_perf = stud_course_perf,currentSem = currentSem,sem_list = sem_list)
+            comingSem=[]
+            coursedict={}
+            print(ts,currentSem)
+            total_sem_list=[]
+            for i in range(currentSem+1,ts+1):
+                total_sem_list.append(i)
+                comingCourses=engine.execute('Select Code from Course_tab where semester=:a',{'a':i})
+                coursedict[i]=[]
+                for j in comingCourses:
+                    coursedict[i].append(j[0])
+            print(coursedict)
+        return render_template('Studprofile.html',title='Profile', stud_details=stud_details,current_user=current_user,Type_of_User=Type_of_User,stud_course_perf = stud_course_perf,currentSem = currentSem,sem_list = sem_list,coursedict=coursedict,total_sem_list=total_sem_list)
     else :
         return render_template('AdminProfile.html',title='Profile',current_user=current_user,Type_of_User=Type_of_User)
 
@@ -210,11 +238,11 @@ def showTablesToAdmin(Type_of_User,current_user,Table):
         for stud in slist:
             stable.append([stud[0],stud[1],stud[2],stud[3],stud[4]])
     else :
-        colnames=['PROGRAMME','BRANCH','NO_OF_STUDENTS']
-        slist = engine.execute('select PROGRAMME,BRANCH,NO_OF_STUDENTS from programme_Tab')
+        colnames=['PROGRAMME','BRANCH','NO_OF_STUDENTS','Total_no_of_sem']
+        slist = engine.execute('select PROGRAMME,BRANCH,NO_OF_STUDENTS,Total_no_of_sem from programme_Tab')
         stable=[]
         for stud in slist:
-            stable.append([stud[0],stud[1],stud[2]])
+            stable.append([stud[0],stud[1],stud[2],stud[3]])
 
     return render_template('showStudTable.html',current_user=current_user,Type_of_User=Type_of_User,stable=stable,Table=Table,colnames=colnames)
         
@@ -291,9 +319,10 @@ def updateStudTables(table):
                         'a' :  request.form['PROGRAMME'],                              
                         'b'  : request.form['BRANCH'],                             
                         'c'  : int(request.form['NO_OF_STUDENTS']), 
+                        'd'  : int(request.form['TOTAL_SEM'])
                                         
         }
-        engine.execute("update programme_tab set NO_OF_STUDENTS = :c where BRANCH = :b and PROGRAMME = :a",param)
+        engine.execute("update programme_tab set NO_OF_STUDENTS = :c,TOTAL_NO_OF_SEM=:d where BRANCH = :b and PROGRAMME = :a",param)
 
 
 

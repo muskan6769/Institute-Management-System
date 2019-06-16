@@ -10,14 +10,17 @@
     <script src="https://code.jquery.com/jquery-1.10.2.min.js"></script> -->
 
     <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.2.0/css/all.css" integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
+
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
 
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='main.css') }}">
+    {% block head %}{% endblock %}
 
     {% if title %}
-        <title>Flask Blog - {{ title }}</title>
+        <title>Institute of Technology - {{ title }}</title>
     {% else %}
-        <title>Flask Blog</title>
+        <title>Institute of Technology</title>
     {% endif %}
 </head>
 <style>
@@ -29,25 +32,34 @@ table, th, td {
 <header class="site-header">
     <nav class="  navbar navbar-expand-md navbar-dark bg-steel fixed-top">
       <div class="container">
-        <!-- <a class="navbar-brand mr-4" href="/">Flask Blog</a> -->
+        <a class="navbar-brand mr-4" href="/"><i class="fas fa-university fa-2x"></i> <b>Institute of Technology</b></a> 
         <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle" aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarToggle">
           <div class="navbar-nav mr-auto">
-            <a class="nav-item nav-link" href="{{ url_for('home') }}">Home</a>
-            <a class="nav-item nav-link" href="{{ url_for('about') }}">About</a>
+            <!-- <a class="nav-item nav-link" href="{{ url_for('home') }}"><i class="fas fa-home"></i> Home</a> -->
           </div>
           <!-- Navbar Right Side -->
           <div class="navbar-nav">
             {% if current_user %}
-              <a class="nav-item nav-link" href="{{ url_for('profile',current_user=current_user,Type_of_User=Type_of_User) }}">{{ current_user }}</a>
-              <a class="nav-item nav-link" href="{{ url_for('logout') }}">Logout</a>
+            <li class="dropdown">
+                <a class="dropdown-toggle nav-item nav-link" data-toggle="dropdown" role="button" href="{{ url_for('profile',current_user=current_user,Type_of_User=Type_of_User) }}"><i class="fas fa-user"></i>  {{ current_user }}</a>
+                <ul class="dropdown-menu">
+                  <li><a class="nav-item nav-link" href="{{ url_for('logout') }}" style="color:black;"><i class="fas fa-external-link-alt"></i> Logout</a></li>
+                </ul>
+              </li>
             {% else %}
-              <a class="nav-item nav-link" href="{{ url_for('register') }}">StudentRegister</a>
-              <a class="nav-item nav-link" href="{{ url_for('Studlogin') }}">StudentLogin</a>
-              <a class="nav-item nav-link" href="{{ url_for('Faclogin') }}">FacultyLogin</a>
-              <a class="nav-item nav-link" href="{{ url_for('adminlogin') }}">AdminLogin</a>
+              <a class="nav-item nav-link" href="{{ url_for('about') }}"><i class="fas fa-tachometer-alt"></i> About</a>
+              <a class="nav-item nav-link" href="{{ url_for('register') }}"><i class="fas fa-user-plus"></i> Register</a>
+                <li class="dropdown">
+                  <a href="#" class="dropdown-toggle nav-item nav-link" data-toggle="dropdown" role="button"><i class="fas fa-sign-in-alt"></i> Login<span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <li><a class="nav-item nav-link" href="{{ url_for('Studlogin') }}" style="color:black;"><i class="fas fa-graduation-cap"></i> Student</a></li>
+                    <li><a class="nav-item nav-link" href="{{ url_for('Faclogin') }}" style="color:black;"><i class="fas fa-chalkboard-teacher"></i> Faculty</a></li>
+                    <li><a class="nav-item nav-link" href="{{ url_for('adminlogin') }}" style="color:black;"><i class="fas fa-chalkboard-teacher"></i> Admin</a></li>
+                  </ul>
+                </li>
             {% endif %}
           </div>
         </div>
@@ -55,12 +67,8 @@ table, th, td {
       </div>
     </nav>
   </header>
- 
-  
-<body >
-    
-    <div id="bgAfterNav">
-    <main role="main" class="container">
+<body onload="disply_cur_sem_tab()">
+    <main role="main" class="container-fluid">
       <div class="row">
         <div class="col-md-8">
           {% with messages = get_flashed_messages(with_categories=true) %}
@@ -72,7 +80,7 @@ table, th, td {
               {% endfor %}
             {% endif %}
           {% endwith %}
-          {% block content %}{% endblock %}
+          {% block body %}{% endblock %}
         </div>
       </div>
     </main>

@@ -1,11 +1,29 @@
 {% extends "layout.html" %}
-{% block content %}
-<a href="{{url_for('addFaculty',current_user=current_user,Type_of_User=Type_of_User)}}" class="btn btn-info">Add a Faculty</a>
-<a href="{{url_for('showTablesToAdmin',current_user=current_user,Type_of_User=Type_of_User,Table='Faculty')}}" class="btn btn-info">Update or Delete a Faculty</a><br>
-<a href="{{url_for('addStudent',current_user=current_user,Type_of_User=Type_of_User)}}" class="btn btn-info">Add a Student</a>
-<a href="{{url_for('showTablesToAdmin',current_user=current_user,Type_of_User=Type_of_User,Table='Student')}}" class="btn btn-info">Update or Delete a Student</a><br>
-<a href="{{url_for('addCourse',current_user=current_user,Type_of_User=Type_of_User)}}" class="btn btn-info">Add a Course</a>
-<a href="{{url_for('showTablesToAdmin',current_user=current_user,Type_of_User=Type_of_User,Table='Course')}}" class="btn btn-info">Update or Delete a Course</a><br>
-<a href="{{url_for('addProgramme',current_user=current_user,Type_of_User=Type_of_User)}}" class="btn btn-info">Add a Programme</a>
-<a href="{{url_for('showTablesToAdmin',current_user=current_user,Type_of_User=Type_of_User,Table='Programme')}}" class="btn btn-info">Update or Delete a Programme</a><br>
-{% endblock %}
+{% block body %}
+<br>
+<br>
+<br><br>
+<br>
+<br>
+<div class="container" style="background: gainsboro;opacity:0.8;padding:10px ">
+    <h1>Welcome {{current_user}}</h1>
+    <br>
+    <nav aria-label="breadcrumb" style="color:white;">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item active" aria-current="page"><i class="fas fa-tachometer-alt"></i><b>ADMIN PANEL</b></li>
+            </ol>
+          </nav>
+          <br>
+    <div class="row"style="padding:10px;margin-left:20px">
+            <div  style="padding:10px; " ><a href="{{url_for('addFaculty',current_user=current_user,Type_of_User=Type_of_User)}}" class="btn btn-primary" style="width:150px;">Add a Faculty</a></div>
+            <div style="padding:10px"><a href="{{url_for('showTablesToAdmin',current_user=current_user,Type_of_User=Type_of_User,Table='Faculty')}}" style="width:240px;" class="btn btn-primary">Update or Delete a Faculty</a></div>
+            <div style="padding:10px"><a href="{{url_for('addStudent',current_user=current_user,Type_of_User=Type_of_User)}}" class="btn btn-primary" style="width:150px;">Add a Student</a></div>
+            <div style="padding:10px"><a href="{{url_for('showTablesToAdmin',current_user=current_user,Type_of_User=Type_of_User,Table='Student')}}" style="width:240px;" class="btn btn-primary">Update or Delete a Student</a></div>
+            <div style="padding:10px"><a href="{{url_for('addCourse',current_user=current_user,Type_of_User=Type_of_User)}}" class="btn btn-primary" style="width:150px;">Add a Course</a></div>
+            <div style="padding:10px"><a href="{{url_for('showTablesToAdmin',current_user=current_user,Type_of_User=Type_of_User,Table='Course')}}" style="width:240px;" class="btn btn-primary">Update or Delete a Course</a></div>
+            <div style="padding:10px"><a href="{{url_for('addProgramme',current_user=current_user,Type_of_User=Type_of_User)}}" class="btn btn-primary">Add a Programme</a></div>
+            <div style="padding:10px"><a href="{{url_for('showTablesToAdmin',current_user=current_user,Type_of_User=Type_of_User,Table='Programme')}}" style="width:240px;" class="btn btn-primary">Update or Delete a Programme</a></div>
+    </div>
+</div>
+
+{% endblock body %}

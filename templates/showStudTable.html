@@ -1,5 +1,12 @@
 {% extends "layout.html" %}
-{% block content %}
+{% block body %}
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
+<div style="padding:50px; background-color:white;opacity:0.8;">
 <table>  
         <tr>
           {% for i in colnames %}
@@ -12,12 +19,12 @@
         <tr >
         
           {% for i in list%}<td>{{i}}</td>{% endfor %}
-            <td><button class ="editbtn" id ="{{stud_id}}" type="button" class="btn btn-secondary" value="{{stud_id}}">Edit</button></td>
-            <td><button class ="deletebtn" id ="{{stud_id}}" type="button" class="btn btn-secondary" value="{{stud_id}}">Delete</button></td>
+            <td><button class ="editbtn btn btn-primary" id ="{{stud_id}}" type="button" value="{{stud_id}}">Edit</button></td>
+            <td><button class ="deletebtn btn btn-danger" id ="{{stud_id}}" type="button"  value="{{stud_id}}">Delete</button></td>
     </tr>
         {% endfor %}
 </table>
-
+</div>
 <script>
 
     var table = "{{Table}}"
@@ -86,9 +93,10 @@
                     }    
 
                     else {
+                        console.log(values)
                             $.ajax({
                                 data : {
-                                    PROGRAMME:values[0],BRANCH:values[1],NO_OF_STUDENTS:values[2]},
+                                    PROGRAMME:values[0],BRANCH:values[1],NO_OF_STUDENTS:values[2],TOTAL_SEM:values[3]},
                                 type : 'POST',
                                 url : '/updateStudTables/Programme'
                             })
@@ -153,9 +161,10 @@
                     }
 
                 else {
+
                             $.ajax({
                                 data : {
-                                    PROGRAMME:values[0],BRANCH:values[1],NO_OF_STUDENTS:values[2]},
+                                    PROGRAMME:values[0],BRANCH:values[1],NO_OF_STUDENTS:values[2],Total_sem:values[3]},
                                 type : 'POST',
                                 url : '/up/Programme'
                             })
@@ -171,4 +180,4 @@
 
 // });
 </script>
-{% endblock content %}
+{% endblock body %}

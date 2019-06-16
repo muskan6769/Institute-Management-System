@@ -1,7 +1,24 @@
 {% extends "layout.html" %}
-{% block content %}
+{% block body %}
+<br>
+<br>
+<br>
+<div style="background-color:white; margin-left:-200px; padding:50px;opacity:0.8;">
     <h1>Welcome {{ current_user }}</h1>
+    <h5><span>Name- </span>{{fdetail[0]}}</h5>
+    <h5><span>Office- </span>{{fdetail[4]}}</h5>
+    <h5><span>RoomNo- </span>{{fdetail[1]}}</h5>
+    <h5><span>PhoneNo- </span>{{fdetail[2]}}</h5>
+    <h5><span>EmailId- </span>{{fdetail[3]}}</h5>
+    <br>
+    <nav aria-label="breadcrumb" style="color:white;">
+            <ol class="breadcrumb">
+              <li class="breadcrumb-item active" aria-current="page"><i class="fas fa-tachometer-alt"></i><b>COURSES</b></li>
+            </ol>
+          </nav>
+          <br>
     {% for course in courses %}
-        <p><span>{{ course }}</span><span><a href="{{ url_for('showList',course= course,Type_of_User=Type_of_User,current_user=current_user ) }}">View List </a></span></p>
+        <h3><span>{{ course }}   </span><span><a href="{{ url_for('showList',course= course,Type_of_User=Type_of_User,current_user=current_user ) }}">View List </a></span></h3>
     {% endfor %}
-{% endblock content %}
+</div>
+{% endblock body %}
