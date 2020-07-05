@@ -12,7 +12,7 @@ app.config['SECRET_KEY'] = '5791628bb0b13ce0c676dfde280ba245'
 
 bcrypt =Bcrypt(app)
 import cx_Oracle
-password='Sweet130118'
+password=''
 host='localhost'
 port=1522
 sid='orcl1'
